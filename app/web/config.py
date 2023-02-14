@@ -9,7 +9,7 @@ if typing.TYPE_CHECKING:
 
 @dataclass
 class SessionConfig:
-    pass
+    key: str
 
 
 @dataclass
@@ -26,16 +26,19 @@ class BotConfig:
 @dataclass
 class Config:
     admin: AdminConfig
-    session: SessionConfig = None
+    session: SessionConfig
     bot: BotConfig = None
 
 
 def setup_config(app: "Application", config_path: str):
-    # TODO: добавить BotConfig и SessionConfig по данным из config.yml
+    # TODO: добавить BotConfig по данным из config.yml
     with open(config_path, "r") as f:
         raw_config = yaml.safe_load(f)
 
     app.config = Config(
+        session=SessionConfig(
+            key=raw_config['session']['key']
+        ),
         admin=AdminConfig(
             email=raw_config["admin"]["email"],
             password=raw_config["admin"]["password"],
