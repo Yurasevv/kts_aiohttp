@@ -1,8 +1,7 @@
 from aiohttp.web_exceptions import HTTPForbidden
 from aiohttp_apispec import request_schema, response_schema
-from aiohttp_session import new_session, get_session
+from aiohttp_session import new_session
 
-from app.admin.models import Admin
 from app.admin.schemes import AdminSchema
 from app.web.app import View
 from app.web.mixins import AuthRequiredMixin
