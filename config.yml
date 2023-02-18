@@ -1,4 +1,4 @@
-user_token: вставьте_ваш_токен_вместо_этой_строки
+user_token: YTkyMmNiNTktN2ZjNS00ZTRmLWI2MTMtOGRhOGNiMTU4ODVkXzQ5MTk=
 
 session:
   key: CaY5iCkYtN7DqXdiYK1BvmGrQuaSA4Tl4bEk9my0jc0=
@@ -6,7 +6,7 @@ admin:
   email: admin@admin.com
   password: admin
 bot:
-  token: group_token
-  group_id: 1
+  token: vk1.a.xAjIuszrZTnD1GXHy-TCww6cdiDe4R50K74bN-XwxhoU7_OzLIorxqEGbLilarCChB4eiOuikmKtzKP651eajOnCR_xN_iyKAqHahF1XMVhmV_GLK7q4BGTb7vCojEx7GmUC0kwmlJXwIKg46FLmLIpHJpxUnWjVeahzZO5_qIoghr648alR5t6E82c7r1mX3MQfAtBxkTXeQ1exopd7Kg
+  group_id: 218914929
 
 
