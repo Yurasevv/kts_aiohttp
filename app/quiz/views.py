@@ -35,27 +35,50 @@ class QuestionAddView(AuthRequiredMixin, View):
     async def post(self):
         title = self.data["title"]
         theme_id = self.data["theme_id"]
-        answers = [
-            Answer(title=answer["title"], is_correct=answer["is_correct"])
-            for answer in self.data["answers"]
-        ]
+        answers = self.data["answers"]
 
-        if await self.store.quizzes.get_question_by_title(title):
-            raise HTTPConflict
+        count = 0
+        for answer in answers:
+            if answer["is_correct"]:
+                count += 1
+
+        if count != 1 or len(answers) == 1:
+            raise HTTPBadRequest
         if len(answers) == 0 or len(answers) == 1:
             raise HTTPBadRequest
         if await self.store.quizzes.get_theme_by_id(theme_id) is None:
             raise HTTPNotFound
-        # if len([answer.is_correct for answer in answers]) != 1:
-        #     raise HTTPBadRequest
+        if await self.store.quizzes.get_question_by_title(title):
+            raise HTTPConflict
 
-        else:
-            question = await self.store.quizzes.create_question(
-                title=title, theme_id=theme_id, answers=answers)
-            response = QuestionSchema().dump(question)
-            return json_response(data=response)
+        question = await self.store.quizzes.create_question(
+            title=title, theme_id=theme_id, answers=[
+                Answer(
+                    title=answer["title"],
+                    is_correct=answer["is_correct"]
+                ) for answer in answers
+            ])
+        return json_response(data=QuestionSchema().dump(question))
 
 
 class QuestionListView(AuthRequiredMixin, View):
+    @response_schema(QuestionSchema)
     async def get(self):
-        raise NotImplementedError
+        theme_id = None
+        if self.request.query:
+            theme_id = self.request.query["theme_id"]
+        if theme_id is None:
+            questions_all = await self.store.quizzes.list_questions()
+            q = [QuestionSchema().dump(question) for question in questions_all]
+            return json_response(
+                data={
+                    "questions": q
+                }
+            )
+        raw_questions = await self.store.quizzes.list_questions(theme_id)
+        q_ = [QuestionSchema().dump(question) for question in raw_questions]
+        return json_response(
+            data={
+                "questions": q_
+            }
+        )
